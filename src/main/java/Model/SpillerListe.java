@@ -8,7 +8,6 @@ import java.awt.*;
 public class SpillerListe {
 
     Spiller[] players;
-    Account[] accounts;
     Spiller currentPlayer;
 
     int currentPlayerID;
@@ -22,10 +21,8 @@ public class SpillerListe {
      */
     public SpillerListe(int playerAmount){
         players = new Spiller[playerAmount];
-        accounts = new Account[playerAmount];
         for (int i = 0; i < playerAmount; i++) {
             players[i] = new Spiller(null,3000);
-            players[i].setAccount(accounts[i]);
             players[i].setPlayerNumber(i);
         }
     }
