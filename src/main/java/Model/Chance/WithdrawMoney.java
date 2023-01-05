@@ -5,11 +5,11 @@ import gui_main.GUI;
 
 import static Model.Account.withdraw;
 
-public class PayOthers extends ChanceCard {
+public class WithdrawMoney extends ChanceCard {
 
     public int amount;
 
-    public PayOthers(String description, int amount) {
+    public WithdrawMoney(String description, int amount) {
         super(description);
         this.amount = amount;
     }

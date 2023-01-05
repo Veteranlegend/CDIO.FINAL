@@ -4,8 +4,13 @@ import Model.Spiller;
 import gui_main.GUI;
 
 public class PayHotelHouse extends ChanceCard{
-    public PayHotelHouse(String description) {
+    int payHousePrice;
+    int payHotelPrice;
+
+    public PayHotelHouse(String description, int payHousePrice, int payHotelPrice) {
         super(description);
+        this.payHousePrice = payHousePrice:
+        this.payHotelPrice = payHotelPrice;
     }
 
     @Override
