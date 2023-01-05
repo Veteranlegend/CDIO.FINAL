@@ -9,33 +9,24 @@ public class SpillerListe {
 
     Spiller[] players;
     Spiller currentPlayer;
-
+    int playerAmount;
     int currentPlayerID;
-
-    private String[] names = {"Peter", "Marcus", "Oliver", "Phill"};
-    private Color[] colors = {Color.CYAN, Color.GREEN, Color.WHITE, Color.BLUE, Color.orange, Color.RED, Color.WHITE };
 
     /**
      * Makes a new player and account for that player and stores it in the playerlist
      * @param playerAmount Specifies how many accounts and players you want to make
      */
     public SpillerListe(int playerAmount){
+        this.playerAmount = playerAmount;
         players = new Spiller[playerAmount];
         for (int i = 0; i < playerAmount; i++) {
-            players[i] = new Spiller(null,3000);
+            players[i] = new Spiller(null,30000);
             players[i].setPlayerNumber(i);
         }
     }
 
     //Getters and setters
-    public Color getColor(int id) { return colors[id% colors.length];}
-
-    public int getPlayerAmount() { return players.length; }
     public Spiller getPlayerList(int id) { return players[id]; }
-
-    public void setNames(String[] names) {
-        this.names = names;
-    }
 
     public Spiller setCurrentPlayer(int index){
         return currentPlayer = players[index];
@@ -49,5 +40,9 @@ public class SpillerListe {
         currentPlayerID = (currentPlayerID + 1) % players.length;
         currentPlayer = players[currentPlayerID];
         return currentPlayer;
+    }
+
+    public int getPlayerAmount() {
+        return playerAmount;
     }
 }

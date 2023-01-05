@@ -7,6 +7,11 @@ public class Dice {
     private final int faces;
     private int faceValue;
 
+    /**
+     * Makes dice object
+     * @param faces How many faces the dice will have
+     * @param faceValue what the facevalue is after rolling the dice
+     */
     public Dice(int faces, int faceValue){
     this.faces = faces;
     this.faceValue = faceValue;
