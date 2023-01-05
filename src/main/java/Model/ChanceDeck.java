@@ -14,7 +14,7 @@ public class ChanceDeck {
         deck[1] = new PayHotelHouse("Ejendomsskatten er steget. Ekstraudgifterne er: 800 kr pr hus, 2300 kr pr hotel.", 800, 2300)
         deck[2] = new WithdrawMoney("De har kørt frem for “fuldt stop”, Betal 1000 kroner i bøde", 1000);
         deck[3] = new WithdrawMoney("Betal 3000 for reparation af deres vogn", 3000);
-        deck[4] = new WithdrawMoney("Betal 3000 for reparation af deres vogn", 3000);
+        deck[4] = ew WithdrawMoney("Betal 3000 for reparation af deres vogn", 3000);
         deck[5] = new WithdrawMoney("De har købt 4 nye dæk til Deres vogn, betal kr 1000", 1000);
         deck[6] = new WithdrawMoney("De har fået en parkeringsbøde, betal kr 200 i bøde", 200);
         deck[7] = new WithdrawMoney("Betal for vognvask og smøring kr 300", 300);
