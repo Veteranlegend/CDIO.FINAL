@@ -12,6 +12,7 @@ import gui_fields.GUI_Player;
 import gui_main.GUI;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 import static Model.Account.pay;
 import static Model.Account.withdraw;
@@ -76,6 +77,7 @@ public class Spil {
                     spiller.setJail(false);
                 }
             } else {
+
                 gui.showMessage("Kast med tærningerne " + spiller.getName());
                 viewGUI.setDice(dice1.roll(), dice2.roll());
                 OnOwneble(dice1, dice2, fl, gui, viewGUI, spiller);
@@ -95,6 +97,14 @@ public class Spil {
                     gui.showMessage("Du går til fængslet");
                     spiller.setJail(true);
                     viewGUI.moveCarToField(spiller, JAILFIELD);
+                }
+
+                ArrayList<Field> ownedFields = spiller.getAllOwnedFields(spiller, fl);
+                if (!ownedFields.isEmpty()){
+                    gui.getUserSelection("Vilket plads vil du bugge hus eller hotel på", String.valueOf(ownedFields));
+                    //viewGUI.buyHouseHotel(spiller);
+                    //if (spiller.getAccount().getBalance() > )
+
                 }
 
                 sl.getNextPlayer();

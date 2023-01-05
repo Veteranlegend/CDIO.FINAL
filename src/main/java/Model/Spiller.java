@@ -1,5 +1,9 @@
 package Model;
 import Model.Account;
+import Model.Fields.Field;
+import Model.Fields.Owneble;
+
+import java.util.ArrayList;
 
 public class Spiller {
     private String name;
@@ -23,6 +27,22 @@ public class Spiller {
         this.account = new Account(startingBalance);
         this.position = 0;
         this.isJail = false;
+    }
+
+    public ArrayList<Field> getAllOwnedFields(Spiller player, FieldList fl){
+        ArrayList<Field> ownedFields = new ArrayList<>();
+        Field[] fields = fl.getFields();
+
+        for (int i = 0; i < fields.length; i++) {
+        Field currentField = fl.getField(i);
+
+            if (currentField instanceof Owneble && ((Owneble) currentField).getOwner() != null){
+                if (((Owneble) currentField).getOwner() == player){
+                    ownedFields.add(currentField);
+                }
+            }
+        }
+        return ownedFields;
     }
 
     public boolean isSetOutofJailCard() {
@@ -52,11 +72,9 @@ public class Spiller {
     public int getJailTurns() {
         return jailTurns;
     }
-
     public void setJailTurns(int jailTurns) {
         this.jailTurns = jailTurns;
     }
-
     public Account getAccount() {
         return account;
     }
