@@ -2,10 +2,7 @@ package View;
 
 import Model.Spiller;
 import Model.SpillerListe;
-import gui_fields.GUI_Car;
-import gui_fields.GUI_Field;
-import gui_fields.GUI_Ownable;
-import gui_fields.GUI_Player;
+import gui_fields.*;
 import gui_main.GUI;
 
 import java.awt.*;
@@ -114,6 +111,15 @@ public class ViewGUI {
             gui_player.setBalance(player.getAccount().getBalance());
             o.setBorder(gui_player.getPrimaryColor(), gui_player.getSecondaryColor());
         }
+    }
+
+    public void buyHouseHotel(int field){
+
+        GUI_Field f = gui.getFields()[field];
+        if(f instanceof GUI_Street s){
+            s.setHouses(1);
+        }
+
     }
 
 }
