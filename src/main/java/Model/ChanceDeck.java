@@ -1,12 +1,17 @@
 package Model;
 
 import Model.Chance.*;
+import Model.Fields.Chance;
+
+import java.util.Random;
 
 public class ChanceDeck {
 
-    ChanceCard[] deck = new ChanceCard[40];
+    ChanceCard[] deck = new ChanceCard[42];
 
     public ChanceDeck() {
+
+
     }
 
     public ChanceCard[] createDeck(){
@@ -55,6 +60,14 @@ public class ChanceDeck {
 
         return deck;
 
+
+    }
+
+    public ChanceCard drawCard(){
+        ChanceCard[] c = createDeck();
+        Random random = new Random();
+
+        return c[random.nextInt(deck.length)];
 
     }
 

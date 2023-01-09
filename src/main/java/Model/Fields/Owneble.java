@@ -8,7 +8,6 @@ public abstract class Owneble extends Field{
     private int[] rent;
     private Spiller owner;
     private int houseAmount;
-
     Color color;
 
     public Owneble(String name, String message, int price, int[] rent, Color color) {

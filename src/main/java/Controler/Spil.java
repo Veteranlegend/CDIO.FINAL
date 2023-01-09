@@ -1,11 +1,8 @@
 package Controler;
 
+import Model.*;
 import Model.Chance.ChanceCard;
-import Model.Dice;
-import Model.FieldList;
 import Model.Fields.*;
-import Model.Spiller;
-import Model.SpillerListe;
 import View.BoardGUI;
 import View.ViewGUI;
 import gui_fields.GUI_Car;
@@ -32,7 +29,7 @@ public class Spil {
         BoardGUI boardGUI = new BoardGUI();
         FieldList fl = new FieldList();
         Field[] fields  = fl.CreateFieldList();
-        //Deck deck = new Deck();
+        ChanceDeck deck = new ChanceDeck();
 
         GUI gui = new GUI(boardGUI.guiFields(fields), Color.WHITE);
         ViewGUI viewGUI = new ViewGUI(gui);
@@ -54,7 +51,7 @@ public class Spil {
             if (spiller.isJail()){
                 spiller.setJailTurns(spiller.getJailTurns()+1);
 
-                String jailString = gui.getUserButtonPressed("Vælg en måde du vil komme ud af fægslet på", "Betal bøde på 1000", "Benyt lødsladeseskort", "Prøv at kaste 2 ens");
+                String jailString = gui.getUserButtonPressed("Vælg en måde du vil komme ud af fængslet på", "Betal bøde på 1000", "Benyt lødsladeseskort", "Prøv at kaste 2 ens");
 
                 if (jailString.equals("Betal bøde på 1000"))  {
                     if (spiller.getAccount().getBalance() > 1000) {
@@ -84,11 +81,11 @@ public class Spil {
             } else {
                 spiller.extraTurns = 0;
 
-                takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl);
+                takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl, deck);
 
                 while(spiller.getExtraTurn()){
                     if(spiller.extraTurns < 2){
-                       takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl);
+                       takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl, deck);
                     } else {
                         gui.showMessage("Du går til fængslet");
                         spiller.setPassingMoney(false);
@@ -102,7 +99,7 @@ public class Spil {
             }
         }
 
-    private void takeTurn(GUI gui, ViewGUI viewGUI, Spiller spiller, Dice dice1, Dice dice2, FieldList fl, SpillerListe sl){
+    private void takeTurn(GUI gui, ViewGUI viewGUI, Spiller spiller, Dice dice1, Dice dice2, FieldList fl, SpillerListe sl, ChanceDeck deck){
         gui.showMessage("Kast med tærningerne " + spiller.getName());
         viewGUI.setDice(dice1.roll(), dice2.roll());
         spiller.setExtraTurn(dice1.getFaceValue() == dice2.getFaceValue());
@@ -115,9 +112,9 @@ public class Spil {
         }
 
         if (currentField instanceof Chance){
-            //ChanceCard chanceCard = deck.drawCard();
-            //chanceCard.doCard(spiller, viewGUI);
-            viewGUI.showChanceCard("Du har trukket et Chancekort");
+            ChanceCard chanceCard = deck.drawCard();
+            chanceCard.doCard(spiller, viewGUI);
+            viewGUI.showChanceCard(chanceCard.getDescription());
 
         }
 
@@ -141,6 +138,7 @@ public class Spil {
                 j++;
             }
         }
+
         ownedFieldsNames = new String[j];
         int k = 0;
         for (int i = 0; i < fl.getFields().length; i++) {
@@ -152,21 +150,22 @@ public class Spil {
         }
 
         if(ownedFieldsNames.length != 0) {
-            String ownedString = gui.getUserSelection("Hvilken Grund vil du købe hus eller hotel på", ownedFieldsNames);
+            String buyHouseString = gui.getUserButtonPressed("Vil du købe et hus el. hotel?", "Ja", "Nej");
+            if (buyHouseString.equals("Ja")) {
+                String ownedString = gui.getUserSelection("Hvilken Grund vil du købe hus eller hotel på", ownedFieldsNames);
 
-            int index = 0;
-            Street buyHouse = null;
-            for (int i = 0; i < fl.getFields().length; i++) {
-                if (ownedString.equals(fl.getField(i).getName())) {
-                    buyHouse = (Street) fl.getField(i);
-                    index = i;
+                int index = 0;
+                Street buyHouse = null;
+                for (int i = 0; i < fl.getFields().length; i++) {
+                    if (ownedString.equals(fl.getField(i).getName())) {
+                        buyHouse = (Street) fl.getField(i);
+                        index = i;
+                    }
                 }
+                assert buyHouse != null;
+                buyHouse.setHouseAmount(buyHouse.getHouseAmount() + 1);
+                viewGUI.buyHouseHotel(buyHouse, index);
             }
-            assert buyHouse != null;
-            buyHouse.setHouseAmount(buyHouse.getHouseAmount() + 1);
-            viewGUI.buyHouseHotel(buyHouse, index);
-
-
         }
         viewGUI.updateBalance(sl);
         spiller.extraTurns += 1;
