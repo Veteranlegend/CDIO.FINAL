@@ -129,4 +129,8 @@ public class ViewGUI {
         }
     }
 
+    public void showMessage(String message) {
+        gui.showMessage(message);
+    }
+
 }

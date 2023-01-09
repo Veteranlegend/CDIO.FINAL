@@ -1,6 +1,7 @@
 package Model.Chance;
 
 import Model.Spiller;
+import View.ViewGUI;
 import gui_main.GUI;
 
 public abstract class ChanceCard {
@@ -11,7 +12,7 @@ public abstract class ChanceCard {
         this.description = description;
     }
 
-    public void doCard(Spiller player, GUI gui){
+    public void doCard(Spiller player, ViewGUI gui){
         gui.showMessage(description);
     }
 
