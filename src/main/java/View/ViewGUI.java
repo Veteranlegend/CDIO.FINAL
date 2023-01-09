@@ -1,5 +1,7 @@
 package View;
 
+import Model.FieldList;
+import Model.Fields.Street;
 import Model.Spiller;
 import Model.SpillerListe;
 import gui_fields.*;
@@ -113,13 +115,18 @@ public class ViewGUI {
         }
     }
 
-    public void buyHouseHotel(int field){
+    public void showChanceCard(String message){
+        gui.displayChanceCard(message);
+    }
 
-        GUI_Field f = gui.getFields()[field];
+    public void buyHouseHotel(Street field, int index){
+        GUI_Field f = gui.getFields()[index];
         if(f instanceof GUI_Street s){
-            s.setHouses(1);
+            if(field.getHouseAmount() <= 4){
+                s.setHouses(field.getHouseAmount());
+            } else
+                s.setHotel(true);
         }
-
     }
 
 }

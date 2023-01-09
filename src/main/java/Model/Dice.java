@@ -26,6 +26,7 @@ public class Dice {
     public int getFaceValue() {
         return faceValue;
     }
+    //test metode
     public void setFaceValue(int faceValue) {
         this.faceValue = faceValue;
     }

@@ -9,11 +9,15 @@ public class Spiller {
     private String name;
     public Account account;
     public int position = 0;
+    public int previousPosition = 0;
     public int playerNumber;
 
     public boolean setOutofJailCard;
     public boolean isJail;
     public int jailTurns;
+    public boolean passingMoney = true;
+    public boolean extraTurn = false;
+    public int extraTurns;
 
     public String getName() {
         return name;
@@ -29,22 +33,6 @@ public class Spiller {
         this.isJail = false;
     }
 
-    public ArrayList<Field> getAllOwnedFields(Spiller player, FieldList fl){
-        ArrayList<Field> ownedFields = new ArrayList<>();
-        Field[] fields = fl.getFields();
-
-        for (int i = 0; i < fields.length; i++) {
-        Field currentField = fl.getField(i);
-
-            if (currentField instanceof Owneble && ((Owneble) currentField).getOwner() != null){
-                if (((Owneble) currentField).getOwner() == player){
-                    ownedFields.add(currentField);
-                }
-            }
-        }
-        return ownedFields;
-    }
-
     public boolean isSetOutofJailCard() {
         return setOutofJailCard;
     }
@@ -53,20 +41,25 @@ public class Spiller {
         this.setOutofJailCard = setOutofJailCard;
     }
     public void setPosition(int pos){
+        this.previousPosition = getPosition();
         this.position = pos%39;
     }
 
     public int getPosition(){
         return position;
     }
-    public void movePosition(int moveAmount){
-        setPosition(getPosition()+moveAmount);
-    }
     public boolean isJail() {
         return isJail;
     }
     public void setJail(boolean jail) {
         isJail = jail;
+    }
+
+    public boolean isPassingMoney() {
+        return passingMoney;
+    }
+    public void setPassingMoney(boolean passingMoney) {
+        this.passingMoney = passingMoney;
     }
 
     public int getJailTurns() {
@@ -86,4 +79,12 @@ public class Spiller {
     public void setPlayerNumber(int playerNumber) {
         this.playerNumber = playerNumber;
     }
+
+    public boolean getExtraTurn() {
+        return extraTurn;
+    }
+    public void setExtraTurn(boolean b){
+        extraTurn = b;
+    }
+
 }

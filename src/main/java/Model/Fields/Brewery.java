@@ -8,7 +8,7 @@ public class Brewery extends Owneble{
     }
 
     @Override
-    public int[] getRent() {
+    public int getRent() {
         return super.getRent();
     }
 }

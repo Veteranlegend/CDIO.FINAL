@@ -1,5 +1,6 @@
 package Controler;
 
+import Model.Chance.ChanceCard;
 import Model.Dice;
 import Model.FieldList;
 import Model.Fields.*;
@@ -8,14 +9,15 @@ import Model.SpillerListe;
 import View.BoardGUI;
 import View.ViewGUI;
 import gui_fields.GUI_Car;
+import gui_fields.GUI_Ownable;
 import gui_fields.GUI_Player;
 import gui_main.GUI;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import static Model.Account.pay;
-import static Model.Account.withdraw;
+import static Model.Account.*;
 
 public class Spil {
 
@@ -30,6 +32,7 @@ public class Spil {
         BoardGUI boardGUI = new BoardGUI();
         FieldList fl = new FieldList();
         Field[] fields  = fl.CreateFieldList();
+        //Deck deck = new Deck();
 
         GUI gui = new GUI(boardGUI.guiFields(fields), Color.WHITE);
         ViewGUI viewGUI = new ViewGUI(gui);
@@ -45,6 +48,8 @@ public class Spil {
 
         while(true) {
             spiller = sl.getCurrentPlayer();
+
+            spiller.setPassingMoney(true);
 
             if (spiller.isJail()){
                 spiller.setJailTurns(spiller.getJailTurns()+1);
@@ -77,40 +82,94 @@ public class Spil {
                     spiller.setJail(false);
                 }
             } else {
+                spiller.extraTurns = 0;
 
-                gui.showMessage("Kast med tærningerne " + spiller.getName());
-                viewGUI.setDice(dice1.roll(), dice2.roll());
-                OnOwneble(dice1, dice2, fl, gui, viewGUI, spiller);
-                Field currentField = fl.getField(spiller.getPosition());
+                takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl);
 
-                if (currentField instanceof Tax) {
-                    withdraw(spiller.getAccount(), ((Tax) currentField).getTax());
-                    viewGUI.updateBalance(sl);
+                while(spiller.getExtraTurn()){
+                    if(spiller.extraTurns < 2){
+                       takeTurn(gui,viewGUI,spiller,dice1,dice2,fl,sl);
+                    } else {
+                        gui.showMessage("Du går til fængslet");
+                        spiller.setPassingMoney(false);
+                        spiller.setJail(true);
+                        viewGUI.moveCarToField(spiller, JAILFIELD);
+                        break;
+                    }
                 }
-                
-
-                if (currentField instanceof Chance){
-
-                }
-
-                if (spiller.getPosition() == 30) {
-                    gui.showMessage("Du går til fængslet");
-                    spiller.setJail(true);
-                    viewGUI.moveCarToField(spiller, JAILFIELD);
-                }
-
-                ArrayList<Field> ownedFields = spiller.getAllOwnedFields(spiller, fl);
-                if (!ownedFields.isEmpty()){
-                    gui.getUserSelection("Vilket plads vil du bugge hus eller hotel på", String.valueOf(ownedFields));
-                    //viewGUI.buyHouseHotel(spiller);
-                    //if (spiller.getAccount().getBalance() > )
-
-                }
-
-                sl.getNextPlayer();
+            sl.getNextPlayer();
+            }
             }
         }
 
+    private void takeTurn(GUI gui, ViewGUI viewGUI, Spiller spiller, Dice dice1, Dice dice2, FieldList fl, SpillerListe sl){
+        gui.showMessage("Kast med tærningerne " + spiller.getName());
+        viewGUI.setDice(dice1.roll(), dice2.roll());
+        spiller.setExtraTurn(dice1.getFaceValue() == dice2.getFaceValue());
+        OnOwneble(dice1, dice2, fl, gui, viewGUI, spiller);
+        Field currentField = fl.getField(spiller.getPosition());
+
+        if (currentField instanceof Tax) {
+            withdraw(spiller.getAccount(), ((Tax) currentField).getTax());
+            viewGUI.updateBalance(sl);
+        }
+
+        if (currentField instanceof Chance){
+            //ChanceCard chanceCard = deck.drawCard();
+            //chanceCard.doCard(spiller, viewGUI);
+            viewGUI.showChanceCard("Du har trukket et Chancekort");
+
+        }
+
+        if (spiller.getPosition() == 30) {
+            gui.showMessage("Du går til fængslet");
+            spiller.setPassingMoney(false);
+            spiller.setJail(true);
+            viewGUI.moveCarToField(spiller, JAILFIELD);    
+        }
+        
+        if(spiller.isPassingMoney() && spiller.previousPosition > spiller.getPosition()){
+            deposit(spiller.getAccount(), 4000);
+        }
+        int j = 0;
+        String[] ownedFieldsNames;
+
+        for (int i = 0; i < fl.getFields().length; i++) {
+
+            Field f = fl.getField(i);
+            if (f instanceof Street && ((Street) f).getOwner() == spiller){
+                j++;
+            }
+        }
+        ownedFieldsNames = new String[j];
+        int k = 0;
+        for (int i = 0; i < fl.getFields().length; i++) {
+            Field f = fl.getField(i);
+            if (f instanceof Street && ((Street) f).getOwner() == spiller){
+                ownedFieldsNames[k] = f.getName();
+                k++;
+            }
+        }
+
+        if(ownedFieldsNames.length != 0) {
+            String ownedString = gui.getUserSelection("Hvilken Grund vil du købe hus eller hotel på", ownedFieldsNames);
+
+            int index = 0;
+            Street buyHouse = null;
+            for (int i = 0; i < fl.getFields().length; i++) {
+                if (ownedString.equals(fl.getField(i).getName())) {
+                    buyHouse = (Street) fl.getField(i);
+                    index = i;
+                }
+            }
+            assert buyHouse != null;
+            buyHouse.setHouseAmount(buyHouse.getHouseAmount() + 1);
+            viewGUI.buyHouseHotel(buyHouse, index);
+
+
+        }
+        viewGUI.updateBalance(sl);
+        spiller.extraTurns += 1;
     }
 
     private void OnOwneble(Dice dice1, Dice dice2, FieldList fl, GUI gui, ViewGUI viewGUI, Spiller spiller) {
@@ -124,7 +183,7 @@ public class Spil {
                 viewGUI.buyOwneble(spiller);
             }
         } else if(currentField instanceof Owneble && ((Owneble) currentField).getOwner() != null){
-            pay(spiller.getAccount(), ((Owneble) currentField).getOwner().getAccount() ,((Owneble) currentField).getRent()[0]);
+            pay(spiller.getAccount(), ((Owneble) currentField).getOwner().getAccount() ,((Owneble) currentField).getRent());
         }
     }
 

@@ -7,6 +7,7 @@ public abstract class Owneble extends Field{
     private int price;
     private int[] rent;
     private Spiller owner;
+    private int houseAmount;
 
     Color color;
 
@@ -16,6 +17,7 @@ public abstract class Owneble extends Field{
         this.rent = rent;
         this.price = price;
         this.color = color;
+        this.houseAmount = 0;
     }
 
     public Color getColor() {
@@ -33,12 +35,8 @@ public abstract class Owneble extends Field{
         this.price = price;
     }
 
-    public int[] getRent() {
-        return rent;
-    }
-
-    public void setRent(int[] rent) {
-        this.rent = rent;
+    public int getRent() {
+        return rent[getHouseAmount()];
     }
 
     public Spiller getOwner() {
@@ -48,4 +46,14 @@ public abstract class Owneble extends Field{
     public void setOwner(Spiller owner) {
         this.owner = owner;
     }
+
+    public int getHouseAmount() {
+        return houseAmount;
+    }
+
+    public void setHouseAmount(int houseAmount) {
+        this.houseAmount = houseAmount;
+    }
+
+
 }
