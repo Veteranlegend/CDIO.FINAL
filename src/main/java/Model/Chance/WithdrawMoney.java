@@ -2,6 +2,7 @@ package Model.Chance;
 
 import Model.Spiller;
 import gui_main.GUI;
+import View.ViewGUI;
 
 import static Model.Account.withdraw;
 
@@ -15,7 +16,7 @@ public class WithdrawMoney extends ChanceCard {
     }
 
     @Override
-    public void doCard(Spiller player, GUI gui) {
+    public void doCard(Spiller player, ViewGUI gui) {
         super.doCard(player, gui);
         withdraw(player.getAccount(), amount);
     }
