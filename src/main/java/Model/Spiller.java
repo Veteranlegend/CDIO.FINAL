@@ -7,22 +7,24 @@ import java.util.ArrayList;
 
 public class Spiller {
     private String name;
-    public Account account;
-    public int position = 0;
+    private final Account account;
+    private int position = 0;
     public int previousPosition = 0;
-    public int playerNumber;
+    private int playerNumber;
 
-    public boolean setOutofJailCard;
-    public boolean isJail;
-    public int jailTurns;
-    public boolean passingMoney = true;
-    public boolean extraTurn = false;
+
+    private boolean setOutofJailCard;
+    private boolean isJail;
+    private int jailTurns;
+    private boolean passingMoney = true;
+    private boolean extraTurn = false;
     public int extraTurns;
 
     public String getName() {
         return name;
     }
-    public void setName(String name){
+
+    public void setName(String name) {
         this.name = name;
     }
 
@@ -40,17 +42,20 @@ public class Spiller {
     public void setSetOutofJailCard(boolean setOutofJailCard) {
         this.setOutofJailCard = setOutofJailCard;
     }
-    public void setPosition(int pos){
+
+    public void setPosition(int pos) {
         this.previousPosition = getPosition();
-        this.position = pos%39;
+        this.position = pos % 39;
     }
 
-    public int getPosition(){
+    public int getPosition() {
         return position;
     }
+
     public boolean isJail() {
         return isJail;
     }
+
     public void setJail(boolean jail) {
         isJail = jail;
     }
@@ -58,6 +63,7 @@ public class Spiller {
     public boolean isPassingMoney() {
         return passingMoney;
     }
+
     public void setPassingMoney(boolean passingMoney) {
         this.passingMoney = passingMoney;
     }
@@ -65,9 +71,11 @@ public class Spiller {
     public int getJailTurns() {
         return jailTurns;
     }
+
     public void setJailTurns(int jailTurns) {
         this.jailTurns = jailTurns;
     }
+
     public Account getAccount() {
         return account;
     }
@@ -83,8 +91,9 @@ public class Spiller {
     public boolean getExtraTurn() {
         return extraTurn;
     }
-    public void setExtraTurn(boolean b){
+
+    public void setExtraTurn(boolean b) {
         extraTurn = b;
     }
-
 }
+

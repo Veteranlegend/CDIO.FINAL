@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.SQLOutput;
+
 public class Account {
 
     public int balance;
@@ -23,7 +25,7 @@ public class Account {
             fromAccount.setBalance(fromAccount.getBalance() - payAmount);
             toAccount.setBalance(toAccount.getBalance() + payAmount);
         }
-        System.out.println("Insufficient funds");
+        System.out.println("sufficent funds");
     }
 
     public static void deposit(Account account, int amount){
@@ -32,9 +34,8 @@ public class Account {
 
     public static void withdraw(Account account, int amount){
         if (account.getBalance() > amount) {
+            System.out.println("Players has payed: " + amount);
             account.setBalance(account.getBalance() - amount);
         }
-        System.out.println("Insufficient funds");
     }
-
 }
